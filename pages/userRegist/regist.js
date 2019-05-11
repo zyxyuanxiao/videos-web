@@ -22,7 +22,7 @@ Page({
 				title: '请等待',
 			});
 			wx.request({
-				url: serverUrl + '/register',
+				url: serverUrl + '/user/register',
 				method: 'POST',
 				data: {
 					username: username,

@@ -22,7 +22,7 @@ Page({
 				title: '请等待',
 			});
 			wx.request({
-				url: serverUrl + '/login',
+				url: serverUrl + '/user/login',
 				method: 'POST',
 				data: {
 					username: username,
@@ -40,7 +40,10 @@ Page({
 							icon: 'none',
 							duration: 2000
 						}),
-							app.userInfo = res.data.data;
+						app.userInfo = res.data.data;
+						wx.navigateTo({
+							url: '../mine/mine',
+						})
 					} else if (status == 500) {
 						wx.showToast({
 							title: res.data.msg,
