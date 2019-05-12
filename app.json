@@ -2,7 +2,8 @@
 	"pages": [
 		"pages/userLogin/login",
 		"pages/mine/mine",
-		"pages/userRegist/regist"
+		"pages/userRegist/regist",
+		"pages/chooseBgm/chooseBgm"
 	],
 	"window": {
 		"backgroundTextStyle": "light",
