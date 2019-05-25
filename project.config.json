@@ -13,7 +13,7 @@
 		"checkInvalidKey": true
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.6.6",
+	"libVersion": "2.0.4",
 	"appid": "wxd5c11e29e466396c",
 	"projectname": "imooc_video",
 	"debugOptions": {
