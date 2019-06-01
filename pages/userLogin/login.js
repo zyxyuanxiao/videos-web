@@ -2,10 +2,23 @@ const app = getApp()
 
 Page({
 	data: {
+		
+	},
 
+	onLoad: function (params) {
+		var me = this;
+		var redirectUrl = params.redirectUrl;
+		// debugger;
+		if (redirectUrl != null && redirectUrl != undefined && redirectUrl != '') {
+			redirectUrl = redirectUrl.replace(/#/g, "?");
+			redirectUrl = redirectUrl.replace(/@/g, "=");
+
+			me.redirectUrl = redirectUrl;
+		}
 	},
 
 	doLogin: function(e) {
+		var me = this;
 		var formObject = e.detail.value;
 		var username = formObject.username;
 		var password = formObject.password;
@@ -40,10 +53,19 @@ Page({
 							icon: 'none',
 							duration: 2000
 						}),
-						app.userInfo = res.data.data;
-						wx.navigateTo({
-							url: '../mine/mine',
-						})
+						// app.userInfo = res.data.data;
+						// 修改原有的全局对象为本地缓存
+						app.setGlobalUserInfo(res.data.data);
+						var redirectUrl = me.redirectUrl;
+						if (redirectUrl != null && redirectUrl != undefined && redirectUrl != '') {
+							wx.redirectTo({
+								url: redirectUrl,
+							})
+						} else {
+							wx.redirectTo({
+								url: '../mine/mine',
+							})
+						}
 					} else if (status == 500) {
 						wx.showToast({
 							title: res.data.msg,

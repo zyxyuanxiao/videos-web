@@ -1,3 +1,5 @@
+var videoUtil = require('../../utils/videoUtil.js')
+
 const app = getApp()
 
 Page({
@@ -7,7 +9,8 @@ Page({
 
 	onLoad: function(params) {
 		var me = this;
-		var user = app.userInfo;
+		// var user = app.userInfo;
+		var user = app.getGlobalUserInfo();
 		var userId = user.id;
 		var serverUrl = app.serverUrl;
 
@@ -20,6 +23,8 @@ Page({
 			method: "POST",
 			header: {
 				'content-type': 'application/json', // 默认值
+				'headerUserId': user.id,
+				'headerUserToken': user.userToken
 			},
 			success: function(res) {
 				console.log(res.data.data);
@@ -37,20 +42,31 @@ Page({
 						receiveLikeCounts: userInfo.receiveLikeCounts,
 						nickname: userInfo.nickname,
 					});
+				} else if (res.data.status == 502) {
+					wx.showToast({
+						title: res.data.msg,
+						duration: 3000,
+						icon: "none",
+						success: function () {
+							wx.redirectTo({
+								url: '../userLogin/login',
+							})
+						}
+					})
 				}
 			}
 		})
 	},
 
 	logout: function () {
-		var user = app.userInfo;
+		var user = app.getGlobalUserInfo();
 		var serverUrl = app.serverUrl;
 		wx.showLoading({
 			title: '请等待...',
 		});
 		// 调用后端
 		wx.request({
-			url: serverUrl + '/logout?userId=' + user.id,
+			url: serverUrl + '/user/logout?userId=' + user.id,
 			method: "POST",
 			header: {
 				'content-type': 'application/json' // 默认值
@@ -65,7 +81,8 @@ Page({
 						icon: 'success',
 						duration: 2000
 					});
-					app.userInfo = null;
+					// app.userInfo = null;
+					wx.removeStorageSync('userInfo');
 					// 页面跳转
 					wx.redirectTo({
 						url: '../userLogin/login',
@@ -78,7 +95,7 @@ Page({
 	changeFace: function () {
 		var me = this;
 		var serverUrl = app.serverUrl;
-		var user = app.userInfo;
+		var user = app.getGlobalUserInfo();
 
 		wx.chooseImage({
 			count: 1,
@@ -137,6 +154,8 @@ Page({
 	},
 
 	uploadVideo: function() {
+		// videoUtil.uploadVideo();
+		
 		var me = this;
 
 		wx.chooseVideo({

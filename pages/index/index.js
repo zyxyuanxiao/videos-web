@@ -7,7 +7,8 @@ Page({
 		pageNum: 1,
 		screenWidth: 350,
 		videoList: [],
-		serverUrl: ''
+		serverUrl: '',
+		searchContent: ''
     },
 
     onLoad: function(params) {
@@ -18,21 +19,35 @@ Page({
 			screenWidth: screenWidth
 		});
 
+		var searchContent = params.search;
+		var isSaveRecord = params.isSaveRecord;
+		if (isSaveRecord == null || isSaveRecord == '' || isSaveRecord == undefined) {
+			isSaveRecord = 0;
+		}
+
+		me.setData({
+			searchContent: searchContent
+		});
+
 		// 获取当前的分页数
 		var pageNum = me.data.pageNum;
-		me.getAllVideoList(pageNum);
+		me.getAllVideoList(pageNum, isSaveRecord);
     },
 
-	getAllVideoList: function (pageNum) {
+	getAllVideoList: function (pageNum, isSaveRecord) {
 		var me = this;
 		wx.showLoading({
 			title: '加载中，请等待...',
 		})
 
 		var serverUrl = app.serverUrl;
+		var searchContent = me.data.searchContent;
 		wx.request({
-			url: serverUrl + '/video/queryAll?pageNum=' + pageNum,
+			url: serverUrl + '/video/queryAll?pageNum=' + pageNum + "&isSaveRecord=" + isSaveRecord,
 			method: 'POST',
+			data: {
+				videoDesc: searchContent
+			},
 			success: function (res) {
 				console.log(res.data)
 				wx.hideLoading();
@@ -76,12 +91,23 @@ Page({
 		}
 
 		var pageNum = currentPage + 1;
-		me.getAllVideoList(pageNum);
+		me.getAllVideoList(pageNum, 0);
 	},
 
 	// 下拉刷新，需要在 index.json 配置
 	onPullDownRefresh: function () {
 		wx.showNavigationBarLoading();
-		this.getAllVideoList(1);
+		this.getAllVideoList(1, 0);
 	},
+
+	showVideoInfo: function (e) {
+		var me = this;
+		var videoList = me.data.videoList;
+		var arrindex = e.target.dataset.arrindex;
+		var videoInfo = JSON.stringify(videoList[arrindex]);
+
+		wx.redirectTo({
+			url: '../videoinfo/videoinfo?videoInfo=' + videoInfo
+		})
+	}
 })

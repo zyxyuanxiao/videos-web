@@ -71,7 +71,7 @@ Page({
         });
 
         var serverUrl = app.serverUrl;
-        var userInfo = app.userInfo;
+		var userInfo = app.getGlobalUserInfo();
 
         wx.uploadFile({
             url: serverUrl + '/video/upload',

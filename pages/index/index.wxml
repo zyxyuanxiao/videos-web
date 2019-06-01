@@ -1,14 +1,14 @@
-  <view wx:for="{{videoList}}" class="item-container">  
+<view wx:for="{{videoList}}" class="item-container">
 
-     <view style='width:{{screenWidth}}px;height:210px;' class='back-img'> 
-        <image src="" style='width:{{screenWidth}}px;height:210px;' mode="aspectFit" bindtap='showVideoInfo' data-arrindex='{{index}}'></image>
-     </view> 
+    <view style='width:{{screenWidth}}px;height:210px;' class='back-img'>
+        <image src="{{serverUrl}}{{item.coverPath}}" style='width:{{screenWidth}}px;height:210px;' mode="aspectFit" bindtap='showVideoInfo' data-arrindex='{{index}}'></image>
+    </view>
 
     <view class="desc">
         <view class="faceName">
-            <image class='myface' src=""></image>
-            <view class="nickname"></view>
+            <image class='myface' src="{{serverUrl}}{{item.faceImage}}"></image>
+            <view class="nickname">{{item.nickname}}</view>
         </view>
     </view>
 
-  </view>  
+</view>
